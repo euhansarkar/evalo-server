@@ -12,6 +12,7 @@ const Auth = require(`./middlewires/auth`);
 const signupRoutes = require(`./routes/signup.js`);
 const signinRoutes = require(`./routes/signin.js`);
 const uploadRoutes = require(`./routes/upload.js`);
+const showVideosRoutes = require(`./routes/showVideos.js`)
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -30,6 +31,7 @@ app.use(`/api/videos`, express.static(`media/uploads/`));
 app.use(`/api/signup`, signupRoutes);
 app.use(`/api/signin`, signinRoutes);
 app.use(`/api/upload`, uploadRoutes);
+app.use(`/api/showvideos`,showVideosRoutes )
 
 app.use(`/`, (req, res) => {
   res.send(`hello world`);
