@@ -2,8 +2,9 @@ require(`dotenv`).config();
 const express = require(`express`);
 const router = express.Router();
 const multer = require(`multer`);
+const generateThumbnail = require("../helpers/videoThumbnails");
 const port = process.env.PORT || 5000;
-const thumbnailGenerator = `../helpers/videoThumbnails.js`;
+// const thumbnailGenerator = `../helpers/videoThumbnails.js`;
 
 const UPLOADS_FOLDER = `media/uploads/`;
 
@@ -24,15 +25,20 @@ const upload = multer({
 });
 
 router.post(`/`, upload.single(`file`), (req, res, next) => {
-  thumbnailGenerator.generateThumbnail(
+  console.log(`from upload `, req.body);
+  console.log(`from upload 2`, req.file);
+
+  generateThumbnail(
     // /api/videos is made publically available in App.js
     "http://localhost:" +
       port +
       "/api/videos/" +
       req.file.filename.replace(/ /g, "_"),
     req.file.filename.replace(/ /g, "_"),
-    req.userData.firstName
+    // req.userData.firstName
+    `euhan`,
   );
+
   res.status(200).json({
     message: "Video upload successful",
   });

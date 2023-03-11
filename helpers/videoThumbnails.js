@@ -4,7 +4,7 @@ const { createWriteStream } = require("fs");
 const VideoDetails = require("../models/videoDetails");
 const port = process.env.PORT || 5000;
 
-const ffmpegPath = "C:/ffmpeg/bin/";
+const ffmpegPath = "C:/Program Files/ffmpeg/bin/ffmpeg.exe";
 const width = 256;
 const height = 144;
 
@@ -13,6 +13,7 @@ const generateThumbnail = (target, title, username) => {
   let tmpFile = createWriteStream(
     "media/uploads/video_thumbnails/" + title + ".jpg"
   );
+
   const ffmpeg = spawn(ffmpegPath, [
     "-ss",
     0,
@@ -30,6 +31,9 @@ const generateThumbnail = (target, title, username) => {
     "mjpeg",
     "pipe:1",
   ]);
+
+  // console.log(`in video thumb`, ffmpeg.stdout.pipe(tmpFile))
+
   ffmpeg.stdout.pipe(tmpFile);
   const videoDetails = new VideoDetails({
     uploader_name: username,
@@ -41,6 +45,9 @@ const generateThumbnail = (target, title, username) => {
       "/api/videos/video_thumbnails/" +
       encodeURIComponent(title + ".jpg"),
   });
+
+  // console.log(videoDetails);
+
   videoDetails
     .save()
     .then((result) => {
@@ -51,6 +58,8 @@ const generateThumbnail = (target, title, username) => {
     });
 };
 
-module.exports = {
-  generateThumbnail: generateThumbnail,
-};
+// module.exports = {
+//   generateThumbnail: generateThumbnail,
+// };
+
+module.exports = generateThumbnail;
